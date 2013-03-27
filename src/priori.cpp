@@ -3,6 +3,8 @@
 #include <map>
 #include <array>
 
+// www.helleboreconsulting.com
+
 namespace priori
 {
 	namespace impl

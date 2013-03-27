@@ -1,6 +1,8 @@
 #ifndef _PRIORI_EXPORT_H_
 #define _PRIORI_EXPORT_H_
 
+// www.helleboreconsulting.com
+
 ///
 ///	\author	John Farrier
 ///

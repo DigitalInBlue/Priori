@@ -1,6 +1,8 @@
 #ifndef _PRIORI_H_
 #define _PRIORI_H_
 
+// www.helleboreconsulting.com
+
 ///
 /// \namespace priori
 ///
@@ -28,38 +30,53 @@
 
 namespace priori
 {
+	///
+	/// \class Base
+	///
+	/// \author	John Farrier
+	///
+	/// A base class required to inherit from to use priori_cast<>
+	///
 	class Base
 	{
 		public:
 			///
-			///
+			/// Default constructor.
 			///
 			Base();
 
 			///
-			///
+			/// Copy constructor.
 			///
 			Base(Base& other);
 
 			///
-			///
+			/// Move constructor
 			///
 			Base(Base&& other);
 			
 			///
-			///
+			/// Trivial destructor
 			///
 			virtual ~Base() throw();
 
 			///
+			/// Test to determine if this class can cast to the type passed in.
 			///
+			/// \param	x	The priorifactor to test for inheritance.
+			///
+			/// \return	True if this class can cast to the type passed in.
 			///
 			bool priori(const int x) const;
 
 		protected:
+			///
+			/// Overloaded constructor to convert a Base pointer
+			///
 			void priori(Base* x);
 
 		private:
+			/// The secret sauce which stores our type information.
 			int prioriFactor;
 	};
 
@@ -67,6 +84,11 @@ namespace priori
 	PRIORI_EXPORT int get(const std::type_info& x);
 }
 
+///
+/// \brief priori_cast
+///
+/// Built a template that looks like standard c++ casts (static_cast, const_cast, etc.)
+///
 template<class T, class V> T priori_cast(V base) 
 { 
 	if(base != nullptr)
