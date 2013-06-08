@@ -1,10 +1,12 @@
-Priori
+#Priori
 
-C++ Fast dynamic_cast<> Alternative
+##C++ Fast dynamic_cast<> Alternative
 
 Copyright 2013 John Farrier 
 
 Apache 2.0 License
+
+##Overview
 
 Priori uses CMake to provide cross-platform builds. It does require a modern 
 compiler (Visual C++ 2012 or GCC 4.7+) due to its use of C++11.
@@ -19,3 +21,4 @@ dynamic_cast, so the performance benefit should be weighed prior to utilization.
 (Given the later case of casting from a derived type to a base type, I would suggest
 using static_cast<> anyway.)
 
+https://d2weczhvl823v0.cloudfront.net/DigitalInBlue/Priori/trend.png
