@@ -19,3 +19,5 @@ dynamic_cast, so the performance benefit should be weighed prior to utilization.
 
 (Given the later case of casting from a derived type to a base type, I would suggest
 using static_cast<> anyway.)
+
+![Image](https://d2weczhvl823v0.cloudfront.net/DigitalInBlue/Priori/trend.png?raw=true)
