@@ -37,7 +37,7 @@ namespace priori
 	///
 	/// A base class required to inherit from to use priori_cast<>
 	///
-	class Base
+	class PRIORI_EXPORT Base
 	{
 		public:
 			///
@@ -71,7 +71,7 @@ namespace priori
 
 		protected:
 			///
-			/// Overloaded constructor to convert a Base pointer
+			/// Convert a Base pointer
 			///
 			void priori(Base* x);
 
@@ -80,8 +80,8 @@ namespace priori
 			int prioriFactor;
 	};
 
-	PRIORI_EXPORT int get(priori::Base* x);
-	PRIORI_EXPORT int get(const std::type_info& x);
+	PRIORI_EXPORT extern int get(priori::Base* x);
+	PRIORI_EXPORT extern int get(const std::type_info& x);
 }
 
 ///
