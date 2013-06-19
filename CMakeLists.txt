@@ -143,24 +143,33 @@ option(PRIORI_GTEST "Set to ON to enable Google tests Priori." ON)
 
 if(PRIORI_GTEST)
 	set(PROJECT_TEST_NAME prioriTest)
-	set(GTEST_INCLUDE_DIR gtest/include)
 	set(GTEST_LIBRARY gtest)
 	set(GTEST_MAIN_LIBRARY gtest_main)
 
 	enable_testing(true)
 
-	add_executable(${PROJECT_TEST_NAME} src/test.cpp)
+	add_executable(${PROJECT_TEST_NAME} 
+		src/test.cpp
+		)
 
 	# VS2012 doesn't support true variadic templates
 	if(MSVC) 
 		add_definitions( /D _VARIADIC_MAX=10 )
 	endif()
 
-	ADD_SUBDIRECTORY(gtest)
+	set(GTEST_RELATIVE_PATH "./" CACHE PATH "")
+	add_subdirectory(${GTEST_RELATIVE_PATH} ${CMAKE_CURRENT_BINARY_DIR}/gtest)
+	set(GTEST_INCLUDE_DIR ${GTEST_RELATIVE_PATH}/include)
 
 	include_directories(${HEADER_PATH})
 	include_directories(${GTEST_INCLUDE_DIR})
-	target_link_libraries(${PROJECT_TEST_NAME} ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} priori)
+	
+	target_link_libraries(${PROJECT_TEST_NAME} 
+		${GTEST_LIBRARY} 
+		${GTEST_MAIN_LIBRARY} 
+		priori
+		)
+
 	add_test(${PROJECT_TEST_NAME} ${PROJECT_TEST_NAME} )
 	add_custom_command(TARGET ${PROJECT_TEST_NAME} POST_BUILD COMMAND $<TARGET_FILE:${PROJECT_TEST_NAME}>)
 endif()
@@ -173,10 +182,12 @@ option(PRIORI_CELERO "Set to ON to enable Celero benchmarks Priori." ON)
 
 if(PRIORI_CELERO)
 	set(PROJECT_TEST_NAME prioriBenchmark)
-	set(CELERO_INCLUDE_DIR celero/include)
 	set(CELERO_LIBRARY celero)
 
-	add_executable(${PROJECT_TEST_NAME} src/benchmark.cpp)
+	add_executable(${PROJECT_TEST_NAME} 
+		src/benchmark.cpp
+		src/priori.cpp
+		)
 
 	# VS2012 doesn't support true variadic templates
 	if(MSVC) 
@@ -188,12 +199,19 @@ if(PRIORI_CELERO)
 		add_definitions(-DCELERO_STATIC)
 	endif()
 
-	ADD_SUBDIRECTORY(celero)
+	set(CELERO_RELATIVE_PATH "./" CACHE PATH "")
+	add_subdirectory(${CELERO_RELATIVE_PATH} ${CMAKE_CURRENT_BINARY_DIR}/celero)
+	set(CELERO_INCLUDE_DIR ${CELERO_RELATIVE_PATH}/include)
 
 	include_directories(${HEADER_PATH})
 	include_directories(${CELERO_INCLUDE_DIR})
 	add_dependencies(${PROJECT_TEST_NAME} celero)
-	target_link_libraries(${PROJECT_TEST_NAME} ${CELERO_LIBRARY} priori)
+	
+	target_link_libraries(${PROJECT_TEST_NAME} 
+		${CELERO_LIBRARY} 
+		priori
+		)
+	
 	add_test(${PROJECT_TEST_NAME} ${PROJECT_TEST_NAME} )
 	add_custom_command(TARGET ${PROJECT_TEST_NAME} POST_BUILD COMMAND $<TARGET_FILE:${PROJECT_TEST_NAME}>)
 endif()
