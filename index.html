@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Priori by DigitalInBlue</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Priori</h1>
+        <p>A fast C++ dynamic_cast&lt;&gt; alternative.</p>
+
+        <p class="view"><a href="https://github.com/DigitalInBlue/Priori">View the Project on GitHub <small>DigitalInBlue/Priori</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/DigitalInBlue/Priori/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/DigitalInBlue/Priori/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/DigitalInBlue/Priori">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="priori" class="anchor" href="#priori"><span class="octicon octicon-link"></span></a>Priori</h1>
+
+<h2>
+<a name="c-fast-dynamic_cast-alternative" class="anchor" href="#c-fast-dynamic_cast-alternative"><span class="octicon octicon-link"></span></a>C++ Fast dynamic_cast&lt;&gt; Alternative</h2>
+
+<p>Copyright 2013 John Farrier 
+Apache 2.0 License</p>
+
+<h3>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h3>
+
+<p>Priori uses CMake to provide cross-platform builds. It does require a modern 
+compiler (Visual C++ 2012 or GCC 4.7+) due to its use of C++11.</p>
+
+<p>Priori is a special base class which facilitates a very fast dynamic_cast&lt;&gt;
+alternative when dynamic_cast&lt;&gt; itself has shown to be a bottleneck. Specifically 
+in the case where dynamic_cast&lt;&gt; from a base class to a derived class is impacting
+performance, priori_cast&lt;&gt; costs 85% less than dynamic_cast&lt;&gt;.  When 
+casting from a derived type to a base class, priori_cast&lt;&gt; costs about 4x more than
+dynamic_cast, so the performance benefit should be weighed prior to utilization.</p>
+
+<p>(Given the later case of casting from a derived type to a base type, I would suggest
+using static_cast&lt;&gt; anyway.)</p>
+
+<p><img src="https://d2weczhvl823v0.cloudfront.net/DigitalInBlue/Priori/trend.png?raw=true" alt="Image"></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/DigitalInBlue">DigitalInBlue</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-41889926-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
