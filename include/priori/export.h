@@ -1,5 +1,5 @@
-#ifndef _PRIORI_EXPORT_H_
-#define _PRIORI_EXPORT_H_
+#ifndef H_PRIORI_EXPORT_H
+#define H_PRIORI_EXPORT_H
 
 // www.helleboreconsulting.com
 

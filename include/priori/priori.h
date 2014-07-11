@@ -1,5 +1,5 @@
-#ifndef _PRIORI_H_
-#define _PRIORI_H_
+#ifndef H_PRIORI_H
+#define H_PRIORI_H
 
 // www.helleboreconsulting.com
 
@@ -67,7 +67,7 @@ namespace priori
 			///
 			/// \return	True if this class can cast to the type passed in.
 			///
-			bool priori(const int x) const;
+			bool priori(const unsigned int x) const;
 
 		protected:
 			///
@@ -77,11 +77,11 @@ namespace priori
 
 		private:
 			/// The secret sauce which stores our type information.
-			int prioriFactor;
+			unsigned int prioriFactor;
 	};
 
-	PRIORI_EXPORT extern int get(priori::Base* x);
-	PRIORI_EXPORT extern int get(const std::type_info& x);
+	PRIORI_EXPORT extern unsigned int get(priori::Base* x);
+	PRIORI_EXPORT extern unsigned int get(const std::type_info& x);
 }
 
 ///
