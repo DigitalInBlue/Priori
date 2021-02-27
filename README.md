@@ -64,6 +64,3 @@ Timer resolution: 0.100000 us
 |rttiCosts       | typeinfoHash    |            Null |             128 |         2000000 |         2.49251 |         0.01131 |     88389976.58 |
 |rttiCosts       | typeinfoName    |            Null |             128 |         2000000 |         1.41683 |         0.00643 |    155496812.32 |
 ```
-
-
-![Image](https://d2weczhvl823v0.cloudfront.net/DigitalInBlue/Priori/trend.png?raw=true)
