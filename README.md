@@ -11,11 +11,11 @@ Priori is a special base class which facilitates a very fast `dynamic_cast<>` al
 
 Priori is interesting, but not a wholesale replacement for `dynamic_cast`.  There are very specific use cases when Priori should be considered to relieve a quantified bottle-neck.  Benchmarking shows that the following scenarios show measurable improvements for non-threaded applications.  Review the benchmark tables below to see if there is a measurable performance improvement for your specific use case.  (There are several use cases which are slower than `dynamic_cast`, so consider this a highly-specialized micro-optimization.)
 
-Priori uses CMake to provide cross-platform builds. It does require a modern compiler due to its use of C++11.
+Priori uses [CMake](https://github.com/Kitware/CMake) to provide cross-platform builds. It does require a modern compiler due to its use of C++11.
 
 ## Benchmark
 
-Given 10 levels of inheritance and benchmarked using Celero.
+Given 10 levels of inheritance and benchmarked using [Celero](https://github.com/DigitalInBlue/Celero).
 
 For the non-thread-safe implementation:
 
