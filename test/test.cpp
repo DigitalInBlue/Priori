@@ -3,37 +3,91 @@
 
 class Alpha : public priori::Base
 {
-	public:
-		Alpha()
-		{
-			this->priori(this);
-		};
+public:
+	Alpha()
+	{
+		this->priori(this);
+	};
 };
 
-class AlphaBeta : public Alpha
+class Beta : public Alpha
 {
-	public:
-		AlphaBeta()
-		{
-			this->priori(this);
-		};
+public:
+	Beta()
+	{
+		this->priori(this);
+	};
 };
 
-class AlphaGamma : public Alpha
+class Beta2 : public Alpha
 {
-	public:
-		AlphaGamma()
-		{
-			this->priori(this);
-		}
+public:
+	Beta2()
+	{
+		this->priori(this);
+	}
+};
+
+class Gamma : public Beta
+{
+public:
+	Gamma()
+	{
+		this->priori(this);
+	};
+};
+
+class Delta : public Gamma
+{
+public:
+	Delta()
+	{
+		this->priori(this);
+	};
+};
+
+class Epsilon : public Delta
+{
+public:
+	Epsilon()
+	{
+		this->priori(this);
+	};
+};
+
+class Zeta : public Epsilon
+{
+public:
+	Zeta()
+	{
+		this->priori(this);
+	};
+};
+
+class Eta : public Zeta
+{
+public:
+	Eta()
+	{
+		this->priori(this);
+	};
+};
+
+class Theta : public Eta
+{
+public:
+	Theta()
+	{
+		this->priori(this);
+	};
 };
 
 /// Test the old fashioned dynamic_cast
 TEST(priori, dynamicCast)
 {
 	Alpha a;
-	AlphaBeta b;
-	AlphaGamma c;
+	Beta b;
+	Beta2 c;
 	Alpha* aPrime = &b;
 
 	// Ensure both a and b derrive from priori::Base
@@ -45,12 +99,12 @@ TEST(priori, dynamicCast)
 
 	EXPECT_TRUE(dynamic_cast<priori::Base*>(aPrime) != nullptr);
 	EXPECT_TRUE(dynamic_cast<Alpha*>(aPrime) != nullptr);
-	EXPECT_TRUE(dynamic_cast<AlphaBeta*>(aPrime) != nullptr);
+	EXPECT_TRUE(dynamic_cast<Beta*>(aPrime) != nullptr);
 
 	EXPECT_TRUE(dynamic_cast<priori::Base*>(&c) != nullptr);
 	EXPECT_TRUE(dynamic_cast<Alpha*>(&c) != nullptr);
-	EXPECT_TRUE(dynamic_cast<AlphaBeta*>(&c) == nullptr);
-	EXPECT_TRUE(dynamic_cast<AlphaGamma*>(&c) != nullptr);
+	EXPECT_TRUE(dynamic_cast<Beta*>(&c) == nullptr);
+	EXPECT_TRUE(dynamic_cast<Beta2*>(&c) != nullptr);
 }
 
 /// Test the quick/dirty priori_cast
@@ -58,8 +112,8 @@ TEST(priori, prioriCast)
 {
 	priori::Base x;
 	Alpha a;
-	AlphaBeta b;
-	AlphaGamma c;
+	Beta b;
+	Beta2 c;
 	Alpha* aPrime = &b;
 
 	// Ensure both a and b derrive from priori::Base
@@ -71,10 +125,10 @@ TEST(priori, prioriCast)
 
 	EXPECT_TRUE(priori_cast<priori::Base*>(aPrime) != nullptr);
 	EXPECT_TRUE(priori_cast<Alpha*>(aPrime) != nullptr);
-	EXPECT_TRUE(priori_cast<AlphaBeta*>(aPrime) != nullptr);
+	EXPECT_TRUE(priori_cast<Beta*>(aPrime) != nullptr);
 
 	EXPECT_TRUE(priori_cast<priori::Base*>(&c) != nullptr);
 	EXPECT_TRUE(priori_cast<Alpha*>(&c) != nullptr);
-	EXPECT_TRUE(priori_cast<AlphaBeta*>(&c) == nullptr);
-	EXPECT_TRUE(priori_cast<AlphaGamma*>(&c) != nullptr);
+	EXPECT_TRUE(priori_cast<Beta*>(&c) == nullptr);
+	EXPECT_TRUE(priori_cast<Beta2*>(&c) != nullptr);
 }

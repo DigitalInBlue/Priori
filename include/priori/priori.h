@@ -39,49 +39,49 @@ namespace priori
 	///
 	class PRIORI_EXPORT Base
 	{
-		public:
-			///
-			/// Default constructor.
-			///
-			Base();
+	public:
+		///
+		/// Default constructor.
+		///
+		Base();
 
-			///
-			/// Copy constructor.
-			///
-			Base(Base& other);
+		///
+		/// Copy constructor.
+		///
+		Base(Base& other);
 
-			///
-			/// Move constructor
-			///
-			Base(Base&& other);
-			
-			///
-			/// Trivial destructor
-			///
-			virtual ~Base() throw();
+		///
+		/// Move constructor
+		///
+		Base(Base&& other);
 
-			///
-			/// Test to determine if this class can cast to the type passed in.
-			///
-			/// \param	x	The priorifactor to test for inheritance.
-			///
-			/// \return	True if this class can cast to the type passed in.
-			///
-			bool priori(const unsigned int x) const;
+		///
+		/// Trivial destructor
+		///
+		virtual ~Base() throw();
 
-		protected:
-			///
-			/// Convert a Base pointer
-			///
-			void priori(Base* x);
+		///
+		/// Test to determine if this class can cast to the type passed in.
+		///
+		/// \param	x	The priorifactor to test for inheritance.
+		///
+		/// \return	True if this class can cast to the type passed in.
+		///
+		bool priori(const uint64_t x) const;
 
-		private:
-			/// The secret sauce which stores our type information.
-			unsigned int prioriFactor;
+	protected:
+		///
+		/// Convert a Base pointer
+		///
+		void priori(const Base* const x);
+
+	private:
+		/// The secret sauce which stores our type information.
+		uint64_t prioriFactor{ 0 };
 	};
 
-	PRIORI_EXPORT extern unsigned int get(priori::Base* x);
-	PRIORI_EXPORT extern unsigned int get(const std::type_info& x);
+	PRIORI_EXPORT extern uint64_t get(const priori::Base* const x);
+	PRIORI_EXPORT extern uint64_t get(const std::type_info& x);
 }
 
 ///
@@ -89,25 +89,27 @@ namespace priori
 ///
 /// Built a template that looks like standard c++ casts (static_cast, const_cast, etc.)
 ///
-template<class T, class V> T priori_cast(V base) 
-{ 
-	if(base != nullptr)
+template<class T, class V> T priori_cast(V base)
+{
+	if (base == nullptr)
 	{
-		// If it is convertable to the base class or to itself, return
-		if(std::is_convertible<std::remove_pointer<V>::type, std::remove_pointer<T>::type>::value == true)
-	    {
-			return reinterpret_cast<T>(base);
-		}
-
-		const auto factor = priori::get(typeid(std::remove_pointer<T>::type));
-
-		if((factor != 0) && (base->priori(factor) == true))
-		{
-			return reinterpret_cast<T>(base);
-		}
+		return nullptr;
 	}
 
-	return nullptr; 
+	// If it is convertable to the base class or to itself, return
+	if (std::is_convertible<std::remove_pointer<V>::type, std::remove_pointer<T>::type>::value == true)
+	{
+		return reinterpret_cast<T>(base);
+	}
+
+	const auto factor = priori::get(typeid(std::remove_pointer<T>::type));
+
+	if ((factor != 0) && (base->priori(factor) == true))
+	{
+		return reinterpret_cast<T>(base);
+	}
+
+	return nullptr;
 }
 
 #endif

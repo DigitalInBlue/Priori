@@ -34,46 +34,47 @@ INHERIT_ME(Deep9, DeepFinal);
 
 class InheritanceFixture : public celero::TestFixture
 {
-	public:
-		InheritanceFixture() : 
-			deep(nullptr),
-			wide(nullptr)
-		{
-		}
+public:
+	/// Before each run, build a vector of random integers.
+	void setUp(const celero::TestFixture::ExperimentValue&) override
+	{
+		this->deep = new DeepFinal;
+		this->deepBase = this->deep;
 
-		/// Before each run, build a vector of random integers.
-		virtual void SetUp()
-		{
-			this->deep = new DeepFinal;
-			this->deepBase = this->deep;
+		this->wide = new WideFinal;
+		this->wideBase = this->wide;
+	}
 
-			this->wide = new WideFinal;
-			this->wideBase = this->wide;
-		}
-
-		/// After each run, clear the vector of random integers.
-		virtual void TearDown()
+	/// After each run, clear the vector of random integers.
+	void tearDown() override
+	{
+		if (this->deep != nullptr)
 		{
 			delete this->deep;
-			delete this->wide;
 		}
 
-		DeepFinal* deep;
-		Base* deepBase;
+		if (this->wide != nullptr)
+		{
+			delete this->wide;
+		}
+	}
 
-		WideFinal* wide;
-		Base* wideBase;
- };
+	DeepFinal* deep{ nullptr };
+	Base* deepBase{ nullptr };
+
+	WideFinal* wide{ nullptr };
+	Base* wideBase{ nullptr };
+};
 
 // ----------------------------------------------------------------------------
 // Cast from a base to the derrived type.
 // ----------------------------------------------------------------------------
-BASELINE_F(priori_deep_fromBase, dynamic_cast, InheritanceFixture, 70, 2000000)
+BASELINE_F(priori_deep_fromBase, dynamic_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(dynamic_cast<DeepFinal*>(this->deepBase));
 }
 
-BENCHMARK_F(priori_deep_fromBase, priori_cast, InheritanceFixture, 70, 2000000)
+BENCHMARK_F(priori_deep_fromBase, priori_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(priori_cast<DeepFinal*>(this->deepBase));
 }
@@ -81,12 +82,12 @@ BENCHMARK_F(priori_deep_fromBase, priori_cast, InheritanceFixture, 70, 2000000)
 // ----------------------------------------------------------------------------
 // Cast from a base to the derrived type.
 // ----------------------------------------------------------------------------
-BASELINE_F(priori_wide_fromBase, dynamic_cast, InheritanceFixture, 70, 2000000)
+BASELINE_F(priori_wide_fromBase, dynamic_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(dynamic_cast<WideFinal*>(this->wideBase));
 }
 
-BENCHMARK_F(priori_wide_fromBase, priori_cast, InheritanceFixture, 70, 2000000)
+BENCHMARK_F(priori_wide_fromBase, priori_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(priori_cast<WideFinal*>(this->wideBase));
 }
@@ -94,12 +95,12 @@ BENCHMARK_F(priori_wide_fromBase, priori_cast, InheritanceFixture, 70, 2000000)
 // ----------------------------------------------------------------------------
 // Cast from a derrived type to the base type.
 // ----------------------------------------------------------------------------
-BASELINE_F(priori_deep_toBase, dynamic_cast, InheritanceFixture, 70, 2000000)
+BASELINE_F(priori_deep_toBase, dynamic_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(dynamic_cast<Base*>(this->deep));
 }
 
-BENCHMARK_F(priori_deep_toBase, priori_cast, InheritanceFixture, 70, 2000000)
+BENCHMARK_F(priori_deep_toBase, priori_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(priori_cast<Base*>(this->deep));
 }
@@ -107,12 +108,12 @@ BENCHMARK_F(priori_deep_toBase, priori_cast, InheritanceFixture, 70, 2000000)
 // ----------------------------------------------------------------------------
 // Cast from a derrived type to the base type.
 // ----------------------------------------------------------------------------
-BASELINE_F(priori_wide_toBase, dynamic_cast, InheritanceFixture, 70, 2000000)
+BASELINE_F(priori_wide_toBase, dynamic_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(dynamic_cast<Base*>(this->wide));
 }
 
-BENCHMARK_F(priori_wide_toBase, priori_cast, InheritanceFixture, 70, 2000000)
+BENCHMARK_F(priori_wide_toBase, priori_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(priori_cast<Base*>(this->wide));
 }
@@ -120,12 +121,12 @@ BENCHMARK_F(priori_wide_toBase, priori_cast, InheritanceFixture, 70, 2000000)
 // ----------------------------------------------------------------------------
 // Cast from a derrived type to the same derrived type.
 // ----------------------------------------------------------------------------
-BASELINE_F(priori_deep_toSelf, dynamic_cast, InheritanceFixture, 70, 2000000)
+BASELINE_F(priori_deep_toSelf, dynamic_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(dynamic_cast<DeepFinal*>(this->deep));
 }
 
-BENCHMARK_F(priori_deep_toSelf, priori_cast, InheritanceFixture, 70, 2000000)
+BENCHMARK_F(priori_deep_toSelf, priori_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(priori_cast<DeepFinal*>(this->deep));
 }
@@ -133,12 +134,12 @@ BENCHMARK_F(priori_deep_toSelf, priori_cast, InheritanceFixture, 70, 2000000)
 // ----------------------------------------------------------------------------
 // Cast from a derrived type to the same derrived type.
 // ----------------------------------------------------------------------------
-BASELINE_F(priori_wide_toSelf, dynamic_cast, InheritanceFixture, 70, 2000000)
+BASELINE_F(priori_wide_toSelf, dynamic_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(dynamic_cast<WideFinal*>(this->wide));
 }
 
-BENCHMARK_F(priori_wide_toSelf, priori_cast, InheritanceFixture, 70, 2000000)
+BENCHMARK_F(priori_wide_toSelf, priori_cast, InheritanceFixture, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(priori_cast<WideFinal*>(this->wide));
 }
@@ -146,17 +147,17 @@ BENCHMARK_F(priori_wide_toSelf, priori_cast, InheritanceFixture, 70, 2000000)
 // ----------------------------------------------------------------------------
 // Experiments for rtti operations costs.
 // ----------------------------------------------------------------------------
-BASELINE(rttiCosts, typeinfo, 70, 2000000)
+BASELINE(rttiCosts, typeinfo, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(typeid(WideFinal));
 }
 
-BENCHMARK(rttiCosts, typeinfoHash, 70, 2000000)
+BENCHMARK(rttiCosts, typeinfoHash, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(typeid(WideFinal).hash_code());
 }
 
-BENCHMARK(rttiCosts, typeinfoName, 70, 2000000)
+BENCHMARK(rttiCosts, typeinfoName, 128, 2000000)
 {
 	celero::DoNotOptimizeAway(typeid(WideFinal).name());
 }

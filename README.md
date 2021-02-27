@@ -1,87 +1,69 @@
-#Priori
+# Priori
 
-##C++ Fast dynamic_cast<> Alternative
+## C++ Fast dynamic_cast<> Alternative
 
-Copyright 2013 John Farrier 
+Copyright 2013-2021 John Farrier
 Apache 2.0 License
 
-##Overview
+## Overview
 
-Priori uses CMake to provide cross-platform builds. It does require a modern 
-compiler (Visual C++ 2012 or GCC 4.7+) due to its use of C++11.
+Priori is a special base class which facilitates a very fast `dynamic_cast<>` alternative when `dynamic_cast<>` itself has shown to be a bottleneck. Specifically in the case where `dynamic_cast<>` from a base class to a derived class is impacting performance.
 
-Priori is a special base class which facilitates a very fast dynamic_cast<>
-alternative when dynamic_cast<> itself has shown to be a bottleneck. Specifically 
-in the case where dynamic_cast<> from a base class to a derived class is impacting
-performance.
+Priori is interesting, but not a wholesale replacement for `dynamic_cast`.  There are very specific use cases when Priori should be considered to relieve a quantified bottle-neck.  Benchmarking shows that the following scenarios show measurable improvements for non-threaded applications.  Review the benchmark tables below to see if there is a measurable performance improvement for your specific use case.  (There are several use cases which are slower than `dynamic_cast`, so consider this a highly-specialized micro-optimization.)
 
-## Benchmark 
+Priori uses CMake to provide cross-platform builds. It does require a modern compiler due to its use of C++11.
 
-Given ten levels of inheritance and benchmarked using Celero...
+## Benchmark
 
-Base Class to Derived Class
-- dynamic_cast 0.374372 us/call (1.0 Baseline Multiple)
-- priori_cast 0.116727 us/call (0.311794 Baseline Multiple)
+Given 10 levels of inheritance and benchmarked using Celero.
 
-Derived Class to Base Class
-- dynamic_cast 0.014044 us/call (1.0 Baseline Multiple)
-- priori_cast 0.014007 us/call (0.997365 Baseline Multiple)
+For the non-thread-safe implementation:
 
-Cast to Self
-- dynamic_cast 0.014930 us/call (1.0 Baseline Multiple)
-- priori_cast 0.013988  us/call (0.999536 Baseline Multiple)
+```
+Celero
+Timer resolution: 0.100000 us
+|     Group      |   Experiment    |   Prob. Space   |     Samples     |   Iterations    |    Baseline     |  us/Iteration   | Iterations/sec  |
+|:--------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|
+|priori_deep_fro | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.01781 |     56143502.79 |
+|priori_wide_fro | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.01614 |     61973227.57 |
+|priori_deep_toB | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00464 |    215331610.68 |
+|priori_wide_toB | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00458 |    218150087.26 |
+|priori_deep_toS | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00498 |    200702458.61 |
+|priori_wide_toS | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00492 |    203417412.53 |
+|rttiCosts       | typeinfo        |            Null |             128 |         2000000 |         1.00000 |         0.00459 |    217983651.23 |
+|priori_deep_fro | priori_cast     |            Null |             128 |         2000000 |         0.78115 |         0.01391 |     71872641.68 |
+|priori_wide_fro | priori_cast     |            Null |             128 |         2000000 |         1.05311 |         0.01699 |     58847760.84 |
+|priori_deep_toB | priori_cast     |            Null |             128 |         2000000 |         0.97782 |         0.00454 |    220215811.50 |
+|priori_wide_toB | priori_cast     |            Null |             128 |         2000000 |         0.99247 |         0.00455 |    219804374.11 |
+|priori_deep_toS | priori_cast     |            Null |             128 |         2000000 |         0.91159 |         0.00454 |    220167327.17 |
+|priori_wide_toS | priori_cast     |            Null |             128 |         2000000 |         0.88314 |         0.00434 |    230335137.63 |
+|rttiCosts       | typeinfoHash    |            Null |             128 |         2000000 |         2.48262 |         0.01139 |     87804021.42 |
+|rttiCosts       | typeinfoName    |            Null |             128 |         2000000 |         1.39401 |         0.00639 |    156372165.75 |
+```
 
-Complete Results:
-<pre>
-[==========] 
-[  CELERO  ]
-[==========] 
-[ STAGE    ] Baselining
-[==========] 
-[ RUN      ] priori_deep_fromBase.dynamic_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_deep_fromBase.dynamic_cast  (0.748744 sec) [2000000 calls in 748744 usec] [0.374372 us/call] [2671139.935679 calls/sec]
-[ RUN      ] priori_wide_fromBase.dynamic_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_wide_fromBase.dynamic_cast  (0.748687 sec) [2000000 calls in 748687 usec] [0.374344 us/call] [2671343.298334 calls/sec]
-[ RUN      ] priori_deep_toBase.dynamic_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_deep_toBase.dynamic_cast  (0.028087 sec) [2000000 calls in 28087 usec] [0.014044 us/call] [71207320.112508 calls/sec]
-[ RUN      ] priori_wide_toBase.dynamic_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_wide_toBase.dynamic_cast  (0.027999 sec) [2000000 calls in 27999 usec] [0.014000 us/call] [71431122.540091 calls/sec]
-[ RUN      ] priori_deep_toSelf.dynamic_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_deep_toSelf.dynamic_cast  (0.029860 sec) [2000000 calls in 29860 usec] [0.014930 us/call] [66979236.436705 calls/sec]
-[ RUN      ] priori_wide_toSelf.dynamic_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_wide_toSelf.dynamic_cast  (0.027990 sec) [2000000 calls in 27990 usec] [0.013995 us/call] [71454090.746695 calls/sec]
-[ RUN      ] rttiCosts.typeinfo -- 70 samples, 2000000 calls per run.
-[     DONE ] rttiCosts.typeinfo  (0.027991 sec) [2000000 calls in 27991 usec] [0.013995 us/call] [71451537.994355 calls/sec]
-[==========] 
-[ STAGE    ] Benchmarking
-[==========] 
-[ RUN      ] priori_deep_fromBase.priori_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_deep_fromBase.priori_cast  (0.233454 sec) [2000000 calls in 233454 usec] [0.116727 us/call] [8566998.209497 calls/sec]
-[ BASELINE ] priori_deep_fromBase.priori_cast 0.311794
-[ RUN      ] priori_wide_fromBase.priori_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_wide_fromBase.priori_cast  (0.286413 sec) [2000000 calls in 286413 usec] [0.143206 us/call] [6982923.261165 calls/sec]
-[ BASELINE ] priori_wide_fromBase.priori_cast 0.382554
-[ RUN      ] priori_deep_toBase.priori_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_deep_toBase.priori_cast  (0.028013 sec) [2000000 calls in 28013 usec] [0.014007 us/call] [71395423.553350 calls/sec]
-[ BASELINE ] priori_deep_toBase.priori_cast 0.997365
-[ RUN      ] priori_wide_toBase.priori_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_wide_toBase.priori_cast  (0.028008 sec) [2000000 calls in 28008 usec] [0.014004 us/call] [71408169.094544 calls/sec]
-[ BASELINE ] priori_wide_toBase.priori_cast 1.000321
-[ RUN      ] priori_deep_toSelf.priori_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_deep_toSelf.priori_cast  (0.028051 sec) [2000000 calls in 28051 usec] [0.014026 us/call] [71298705.928487 calls/sec]
-[ BASELINE ] priori_deep_toSelf.priori_cast 0.939417
-[ RUN      ] priori_wide_toSelf.priori_cast -- 70 samples, 2000000 calls per run.
-[     DONE ] priori_wide_toSelf.priori_cast  (0.027977 sec) [2000000 calls in 27977 usec] [0.013988 us/call] [71487293.133646 calls/sec]
-[ BASELINE ] priori_wide_toSelf.priori_cast 0.999536
-[ RUN      ] rttiCosts.typeinfoHash -- 70 samples, 2000000 calls per run.
-[     DONE ] rttiCosts.typeinfoHash  (0.319687 sec) [2000000 calls in 319687 usec] [0.159844 us/call] [6256119.266658 calls/sec]
-[ BASELINE ] rttiCosts.typeinfoHash 11.421064
-[ RUN      ] rttiCosts.typeinfoName -- 70 samples, 2000000 calls per run.
-[     DONE ] rttiCosts.typeinfoName  (0.054207 sec) [2000000 calls in 54207 usec] [0.027103 us/call] [36895603.888797 calls/sec]
-[ BASELINE ] rttiCosts.typeinfoName 1.936587
-[==========] 
-[ STAGE    ] Completed.  15 tests complete.
-[==========] 
-</pre>
+For the thread-safe implementation:
+
+```
+Celero
+Timer resolution: 0.100000 us
+|     Group      |   Experiment    |   Prob. Space   |     Samples     |   Iterations    |    Baseline     |  us/Iteration   | Iterations/sec  |
+|:--------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|:---------------:|
+|priori_deep_fro | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.01781 |     56154537.29 |
+|priori_wide_fro | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.01612 |     62034739.45 |
+|priori_deep_toB | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00455 |    219973603.17 |
+|priori_wide_toB | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00457 |    219034059.80 |
+|priori_deep_toS | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00503 |    198925800.68 |
+|priori_wide_toS | dynamic_cast    |            Null |             128 |         2000000 |         1.00000 |         0.00488 |    204918032.79 |
+|rttiCosts       | typeinfo        |            Null |             128 |         2000000 |         1.00000 |         0.00454 |    220312844.24 |
+|priori_deep_fro | priori_cast     |            Null |             128 |         2000000 |         1.46114 |         0.02602 |     38431975.40 |
+|priori_wide_fro | priori_cast     |            Null |             128 |         2000000 |         1.94498 |         0.03135 |     31894874.49 |
+|priori_deep_toB | priori_cast     |            Null |             128 |         2000000 |         0.99890 |         0.00454 |    220215811.50 |
+|priori_wide_toB | priori_cast     |            Null |             128 |         2000000 |         0.99660 |         0.00455 |    219780219.78 |
+|priori_deep_toS | priori_cast     |            Null |             128 |         2000000 |         0.90302 |         0.00454 |    220288578.04 |
+|priori_wide_toS | priori_cast     |            Null |             128 |         2000000 |         0.88648 |         0.00433 |    231160425.34 |
+|rttiCosts       | typeinfoHash    |            Null |             128 |         2000000 |         2.49251 |         0.01131 |     88389976.58 |
+|rttiCosts       | typeinfoName    |            Null |             128 |         2000000 |         1.41683 |         0.00643 |    155496812.32 |
+```
+
 
 ![Image](https://d2weczhvl823v0.cloudfront.net/DigitalInBlue/Priori/trend.png?raw=true)
