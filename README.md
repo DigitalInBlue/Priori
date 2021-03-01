@@ -15,7 +15,7 @@ Priori uses [CMake](https://github.com/Kitware/CMake) to provide cross-platform 
 
 ## Benchmark
 
-Given 10 levels of inheritance and benchmarked using [Celero](https://github.com/DigitalInBlue/Celero).
+Given 10 levels of inheritance and benchmarked using [Celero](https://github.com/DigitalInBlue/Celero).  (Start by looking at the "Baseline" number.  Lower is better.)
 
 For the non-thread-safe implementation:
 
