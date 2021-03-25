@@ -97,12 +97,12 @@ template<class T, class V> T priori_cast(V base)
 	}
 
 	// If it is convertable to the base class or to itself, return
-	if (std::is_convertible<std::remove_pointer<V>::type, std::remove_pointer<T>::type>::value == true)
+	if (std::is_convertible<typename std::remove_pointer<V>::type, typename std::remove_pointer<T>::type>::value == true)
 	{
 		return reinterpret_cast<T>(base);
 	}
 
-	const auto factor = priori::get(typeid(std::remove_pointer<T>::type));
+	const auto factor = priori::get(typeid(typename std::remove_pointer<T>::type));
 
 	if ((factor != 0) && (base->priori(factor) == true))
 	{
