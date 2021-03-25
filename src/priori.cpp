@@ -3,6 +3,7 @@
 #include <map>
 #include <array>
 #include <algorithm>
+#include <typeinfo>
 
 namespace priori
 {
