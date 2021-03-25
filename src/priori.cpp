@@ -2,6 +2,7 @@
 #include <mutex>
 #include <map>
 #include <array>
+#include <algorithm>
 
 namespace priori
 {
